@@ -10,8 +10,8 @@ AI Product Discovery Copilot is a research workflow that helps analyze public cu
 
 If you publish this GPT publicly, replace the contact details below with your own:
 
-- Contact email: `YOUR_EMAIL@example.com`
-- Maintainer: `YOUR_NAME`
+- Contact email: `amanharpavatdev@gmail.com`
+- Maintainer: `Aman Harpavat`
 
 ## What This GPT Does
 
