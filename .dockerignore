@@ -1,0 +1,8 @@
+.git
+.venv
+.venv39
+.pycache_tmp
+backend/.pytest_cache
+backend/data/runs
+backend/logs
+docs
