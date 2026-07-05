@@ -111,7 +111,7 @@ def test_artifacts_are_created_and_retrievable(monkeypatch, tmp_path: Path) -> N
     assert (run_dir / "all_feedback_raw.csv").exists()
     assert (run_dir / "all_clusters.csv").exists()
     assert (run_dir / "all_clusters_compact.json").exists()
-    assert (run_dir / "all_clusters_compact_tier_1.json").exists()
+    assert (run_dir / "all_clusters_compact_tier_1_part_1.json").exists()
     assert (run_dir / "opportunity_traceability.json").exists()
     assert (run_dir / "opportunity_traceability_compact_part_1.json").exists()
     assert (run_dir / "segment_evidence.json").exists()
@@ -143,10 +143,10 @@ def test_artifacts_are_created_and_retrievable(monkeypatch, tmp_path: Path) -> N
     assert compact_clusters_response.status_code == 200
     compact_clusters_payload = compact_clusters_response.json()
     assert "parts" in compact_clusters_payload
-    assert compact_clusters_payload["parts"][0]["artifact_name"] == "all_clusters_compact_tier_1.json"
+    assert compact_clusters_payload["parts"][0]["artifact_name"] == "all_clusters_compact_tier_1_part_1.json"
 
     compact_cluster_tier_response = client.get(
-        f"/runs/{run_id}/artifact/all_clusters_compact_tier_1.json"
+        f"/runs/{run_id}/artifact/all_clusters_compact_tier_1_part_1.json"
     )
     assert compact_cluster_tier_response.status_code == 200
     compact_cluster_tier_payload = compact_cluster_tier_response.json()
@@ -235,6 +235,7 @@ def test_compact_payload_excludes_long_tail_clusters_but_artifacts_keep_all(
     compact_artifact_payload = compact_artifact_response.json()
     compact_total_clusters = sum(part["cluster_count"] for part in compact_artifact_payload["parts"])
     assert compact_total_clusters == 25
+    assert len(compact_artifact_payload["parts"]) >= 4
 
 
 def test_final_report_can_be_saved_and_retrieved(monkeypatch, tmp_path: Path) -> None:

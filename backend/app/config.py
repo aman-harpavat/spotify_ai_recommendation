@@ -42,6 +42,8 @@ class Settings(BaseModel):
     compact_payload_tier_2_limit: int = 40
     compact_payload_top_opportunities: int = 4
     compact_payload_top_segments: int = 2
+    compact_cluster_artifact_part_size: int = 8
+    compact_cluster_artifact_max_parts_per_tier: int = 20
     compact_opportunity_artifact_part_size: int = 30
     compact_opportunity_artifact_max_parts: int = 6
     response_top_level_clusters: int = 0

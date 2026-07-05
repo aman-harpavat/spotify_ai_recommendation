@@ -181,6 +181,7 @@ Main behavior:
 Important:
 - GPT should use `compact_gpt_payload` first
 - GPT / Agent 0 must infer and confirm `success_criteria` before the backend call; the backend never infers them
+- GPT / Agent 0 should infer the rest of the draft brief where reasonable, show the full locked brief, and wait for an explicit `go ahead` before calling the backend
 - if deeper evidence is required, GPT should fetch artifacts such as `all_clusters_compact.json`, `all_clusters.json`, `all_clusters.csv`, `research_question_coverage.json`, `charts_data.json`, `quality_diagnostics.json`, `opportunity_traceability_compact.json`, `opportunity_traceability.json`, `success_criteria_impact_mapping_compact.json`, `success_criteria_impact_mapping.json`, `segment_evidence.json`, or `evidence_appendix.md`
 - this avoids payload-size failures while preserving full analysis depth
 - the final Markdown report should be returned directly in chat as a downloadable Markdown output, not written back into the backend artifact folder as part of the normal flow
@@ -300,6 +301,7 @@ Artifacts:
 
 Recommended validation flow:
 - verify the action imports without schema errors
-- send the Spotify discovery brief through the GPT
-- confirm the GPT waits to lock the brief before calling the action
+- send a short Spotify discovery prompt through the GPT
+- confirm the GPT infers the missing brief fields and asks only minimal follow-up questions
+- confirm the GPT presents the full locked brief and waits for `go ahead` before calling the action
 - confirm the GPT uses backend counts, quotes, metrics, and warnings without inventing evidence

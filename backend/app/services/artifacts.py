@@ -29,18 +29,6 @@ ARTIFACT_DEFINITIONS: dict[str, tuple[str, str]] = {
         "application/json",
         "Index for GPT-safe compact cluster shard artifacts.",
     ),
-    "all_clusters_compact_tier_1.json": (
-        "application/json",
-        "GPT-safe compact cluster shard for tier 1 clusters.",
-    ),
-    "all_clusters_compact_tier_2.json": (
-        "application/json",
-        "GPT-safe compact cluster shard for tier 2 clusters.",
-    ),
-    "all_clusters_compact_tier_3.json": (
-        "application/json",
-        "GPT-safe compact cluster shard for tier 3 clusters.",
-    ),
     "opportunity_traceability_compact.json": (
         "application/json",
         "Index for GPT-safe compact opportunity traceability shard artifacts.",
@@ -122,6 +110,15 @@ ARTIFACT_DEFINITIONS: dict[str, tuple[str, str]] = {
         "Final GPT-generated Markdown report for download.",
     ),
 }
+
+for tier_name in ("tier_1", "tier_2", "tier_3"):
+    for part in range(1, settings.compact_cluster_artifact_max_parts_per_tier + 1):
+        ARTIFACT_DEFINITIONS[
+            f"all_clusters_compact_{tier_name}_part_{part}.json"
+        ] = (
+            "application/json",
+            f"GPT-safe compact cluster shard for {tier_name} part {part}.",
+        )
 
 
 def ensure_run_dir(run_id: str) -> Path:

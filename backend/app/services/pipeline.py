@@ -2010,20 +2010,33 @@ def _write_compact_cluster_artifacts(
     run_id: str,
     tiered_clusters: dict[str, list[ClusterItem]],
 ) -> dict[str, Any]:
+    part_size = settings.compact_cluster_artifact_part_size
+    max_parts_per_tier = settings.compact_cluster_artifact_max_parts_per_tier
     parts: list[dict[str, Any]] = []
     for tier_name in ["tier_1", "tier_2", "tier_3"]:
-        artifact_name = f"all_clusters_compact_{tier_name}.json"
-        payload = [_compact_cluster_artifact_row(item) for item in tiered_clusters[tier_name]]
-        write_json_artifact(run_id, artifact_name, payload)
-        parts.append(
-            {
-                "artifact_name": artifact_name,
-                "tier": tier_name,
-                "cluster_count": len(payload),
-            }
-        )
+        compact_rows = [
+            _compact_cluster_artifact_row(item)
+            for item in tiered_clusters[tier_name]
+        ]
+        for index in range(max_parts_per_tier):
+            start = index * part_size
+            if start >= len(compact_rows):
+                break
+            end = None if index == max_parts_per_tier - 1 else start + part_size
+            artifact_name = f"all_clusters_compact_{tier_name}_part_{index + 1}.json"
+            payload = compact_rows[start:end]
+            write_json_artifact(run_id, artifact_name, payload)
+            parts.append(
+                {
+                    "artifact_name": artifact_name,
+                    "tier": tier_name,
+                    "part": index + 1,
+                    "cluster_count": len(payload),
+                }
+            )
     return {
         "total_clusters": sum(len(items) for items in tiered_clusters.values()),
+        "part_size": part_size,
         "parts": parts,
     }
 
